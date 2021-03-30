@@ -1,0 +1,45 @@
+<div *ngIf="!(loading$ | async) && !(error$ | async)">
+  <div class="mt-5">
+    <div *ngFor="let result of (searchResult$ | async);last as isLast">
+      <div class="border-top mb-2" [class.border-bottom]="isLast">
+        <div class="container-fluid small" style="padding: 0">
+
+          <div class="row font-weight-bold">
+            <div class="col-sm-2 strong">
+              {{result.publisher}}
+            </div>
+            <div class="col-sm-2 strong content">
+                  <span class="truncate">
+                    {{result.author}}
+                  </span>
+            </div>
+            <div class="col-sm-8 text-justify strong">
+              <a href={{result.link}} target="_blank">{{result.title}}</a>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-2">
+            </div>
+            <div class="col-sm-2">
+              {{result.date}}
+            </div>
+            <div class="col-sm-8 mb-2">
+              {{result.abstract}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="(loading$ | async)">
+  loading ...
+</div>
+<div *ngIf="(error$ | async) as error">
+  <p>There has been a problem:</p>
+  <p>{{error.name}}</p>
+</div>
+
+
+<!--TODO: loading + error + state reset-->

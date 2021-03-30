@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';
+
+$secondary: #edff21;
+
+body {
+  font-family: Menlo;
+}
+
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+

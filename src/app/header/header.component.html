@@ -1,0 +1,13 @@
+<ngb-accordion #a="ngbAccordion">
+  <ngb-panel>
+    <ng-template ngbPanelHeader let-opened="opened">
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="m-0"><strong>SciFind</strong></h5>
+        <button ngbPanelToggle class="btn btn-link p-0">Documentation</button>
+      </div>
+    </ng-template>
+    <ng-template ngbPanelContent>
+      Here you will find the documentation
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>

@@ -1,0 +1,26 @@
+$secondary: #edff21;
+
+::ng-deep {
+  .card {
+    border: none;
+    border-radius: 0;
+    background-color: black;
+    color: white;
+  }
+  .card-header {
+    background-color: transparent;
+  }
+
+  .card-header > div > button {
+    color: white;
+  }
+
+  .card-header > div > button:hover {
+    color: $secondary;
+  }
+
+  .card-body {
+    background-color: $secondary;
+    color: black;
+  }
+}
