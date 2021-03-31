@@ -72,12 +72,12 @@ function transformSpringerPayload(payload: SpringerResponseModel): SearchResult[
   const searchResults: SearchResult[] = [];
   payload.records.forEach( (record) => {
     const result: SearchResult = {
-      author: transformToString(record.creators),
-      title: record.title,
-      date: record.publicationDate.toString(),
-      publisher: record.publisher,
-      link: record.url[0].value,
-      abstract: record.abstract
+      author: transformToString(record.creators) ? transformToString(record.creators) : '⚠️ not given',
+      title: record.title ? record.title : '⚠️ not given',
+      date: record.publicationDate ? record.publicationDate.toString() : '⚠️ not given',
+      publisher: record.publisher ?  record.publisher : '⚠️ not given',
+      link: record.url[0].value ? record.url[0].value : '⚠️ not given',
+      abstract: record.abstract ? record.abstract : '⚠️ not given'
     };
     searchResults.push(result);
   });
