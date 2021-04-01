@@ -1,6 +1,8 @@
 import {Action} from '@ngrx/store';
 import {SearchResult} from '../models/search-result.model';
 import {SpringerResponseModel} from '../models/springer-response.model';
+import {IeeeResponseModel} from '../models/ieee-response.model';
+import {ElsevierResultModel} from '../models/elsevier-result.model';
 
 export enum SearchActionTypes {
   LOAD_SEARCH_IEEE = '[SEARCH] Load Search with IEEE',
@@ -30,7 +32,7 @@ export class LoadSearchElsevierAction implements Action {
 
 export class LoadSearchIeeeSuccessAction implements Action {
   readonly type = SearchActionTypes.LOAD_SEARCH_IEEE_SUCCESS;
-  constructor(public payload: SearchResult[]) {}
+  constructor(public payload: IeeeResponseModel) {}
 }
 export class LoadSearchSpringerSuccessAction implements Action {
   readonly type = SearchActionTypes.LOAD_SEARCH_SPRINGER_SUCCESS;
@@ -38,7 +40,7 @@ export class LoadSearchSpringerSuccessAction implements Action {
 }
 export class LoadSearchElsevierSuccessAction implements Action {
   readonly type = SearchActionTypes.LOAD_SEARCH_ELSEVIER_SUCCESS;
-  constructor(public payload: SearchResult[]) {}
+  constructor(public payload: ElsevierResultModel) {}
 }
 
 

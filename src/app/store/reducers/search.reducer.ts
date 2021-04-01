@@ -1,6 +1,8 @@
 import {SearchResult} from '../models/search-result.model';
 import {SearchAction, SearchActionTypes} from '../actions/search.actions';
 import {Creator, SpringerResponseModel} from '../models/springer-response.model';
+import {AuthorsEntity, IeeeResponseModel} from '../models/ieee-response.model';
+import {Author, ElsevierResultModel} from '../models/elsevier-result.model';
 
 export interface SearchState {
   list: SearchResult[];
@@ -45,14 +47,14 @@ export function SearchReducer(state: SearchState = initialState, action: SearchA
       return {
         ...state,
         error: undefined,
-        list: action.payload,
+        list: transformIeeePayload(action.payload),
         loading: false
       };
     case SearchActionTypes.LOAD_SEARCH_ELSEVIER_SUCCESS:
       return {
         ...state,
         error: undefined,
-        list: action.payload,
+        list: transformElsevierPayload(action.payload),
         loading: false
       };
 
@@ -84,8 +86,49 @@ function transformSpringerPayload(payload: SpringerResponseModel): SearchResult[
   return searchResults;
 }
 
+function transformIeeePayload(payload: IeeeResponseModel): SearchResult[] {
+  const searchResults: SearchResult[] = [];
+  payload.articles.forEach( (article) => {
+    const result: SearchResult = {
+      author: transformToStringIeee(article.authors.authors) ? transformToStringIeee(article.authors.authors) : '⚠️ not given',
+      title: article.title ? article.title : '⚠️ not given',
+      date: article.publication_date ? article.publication_date : '⚠️ not given',
+      publisher: article.publisher ?  article.publisher : '⚠️ not given',
+      link: article.html_url ? article.html_url : '⚠️ not given',
+      abstract: article.abstract ? article.abstract : '⚠️ not given'
+    };
+    searchResults.push(result);
+  });
+  return searchResults;
+}
+
+function transformElsevierPayload(payload: ElsevierResultModel): SearchResult[] {
+  const searchResults: SearchResult[] = [];
+  payload['search-results'].entry.forEach( (entry) => {
+    const result: SearchResult = {
+      author: entry['dc:creator'] ? entry['dc:creator'] : '⚠️ not given',
+      title: entry['dc:title'] ? entry['dc:title']  : '⚠️ not given',
+      date: entry['prism:coverDate'] ? entry['prism:coverDate'] : '⚠️ not given',
+      publisher: 'Elsevier',
+      link: entry.link.filter(link => link['@ref'] === 'scopus')[0]['@href'] ? entry.link.filter(link => link['@ref'] === 'scopus')[0]['@href'] : '⚠️ not given',
+      abstract: entry['dc:description'] ? entry['dc:description'] : '⚠️ not given'
+    };
+    searchResults.push(result);
+  });
+
+  return searchResults;
+
+}
+
 function transformToString(authors: Creator[]): string{
   let authorsString = '';
   authors.forEach(author => authorsString = authorsString.concat(author.creator, '; '));
   return authorsString.slice(0, -2);
 }
+
+function transformToStringIeee(authors: AuthorsEntity[]): string{
+  let authorsString = '';
+  authors.forEach(author => authorsString = authorsString.concat(author.full_name, '; '));
+  return authorsString.slice(0, -2);
+}
+
