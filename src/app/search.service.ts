@@ -22,8 +22,10 @@ export class SearchService {
 
   getSearchResultsElsevier(searchQuery: string): Observable<ElsevierResultModel> {
     return this.http.get<ElsevierResultModel>(
-      'https://api.elsevier.com/content/search/sciencedirect?query=gene&apiKey=7f59af901d2d86f78a1fd60c1bf9426a',
-      //'https://api.elsevier.com/content/search/scopus?query=' + searchQuery.replace(' ', '+') + '&httpAccept=application/json&apiKey=7f59af901d2d86f78a1fd60c1bf9426a',
+      'https://cors-anywhere.herokuapp.com/https://api.elsevier.com/content/search/scopus?query=' +
+      searchQuery.replace(' ', '+') +
+      //'&view=complete'+
+      '&apiKey=7f59af901d2d86f78a1fd60c1bf9426a',
       {
         headers: new HttpHeaders().set('Access-Control-Allow-Origin', '*'),
       }

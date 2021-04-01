@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Store} from '@ngrx/store';
 import {AppState} from '../store/models/app.state.model';
 import {LoadSearchElsevierAction, LoadSearchIeeeAction, LoadSearchSpringerAction} from '../store/actions/search.actions';
@@ -13,7 +13,7 @@ import {LoadSearchElsevierAction, LoadSearchIeeeAction, LoadSearchSpringerAction
 
 export class SearchInputComponent {
   searchForm = new FormGroup({
-    searchQuery: new FormControl(''),
+    searchQuery: new FormControl('',[Validators.required]),
   });
 
   constructor(private store: Store<AppState>) {}

@@ -6,6 +6,7 @@ $secondary: #edff21;
   min-width: 350px;
   padding: 10px;
 }
+
 ul {
   list-style-type: none;
   padding: 0;
@@ -15,4 +16,24 @@ ul {
 .searchButton {
   display: block;
   width: 100%;
+  background-color: white;
+  color: black;
+  border-color: black;
+}
+
+.searchButton:hover {
+  background-color: black;
+  color: $secondary;
+}
+
+.searchButton:disabled {
+  background-color: white;
+  color: grey;
+  border-color: lightgray;
+}
+
+.btn:active  {
+  background-color: $secondary;
+  color: black;
+  border-color: black;
 }
