@@ -16,7 +16,7 @@ export class SearchService {
 
   getSearchResultsIeee(searchQuery: string): Observable<IeeeResponseModel> {
     return this.http.get<IeeeResponseModel>(
-      'https://ieeexploreapi.ieee.org/api/v1/search/articles?querytext=' + searchQuery.replace(' ', '+') + '&format=json&apikey=53sdkeep5mazvnwbz95u8xny'
+      'https://cors-anywhere.herokuapp.com/http://ieeexploreapi.ieee.org/api/v1/search/articles?querytext=' + searchQuery.replace(' ', '+') + '&format=json&apikey=53sdkeep5mazvnwbz95u8xny'
     );
   }
 
@@ -24,11 +24,8 @@ export class SearchService {
     return this.http.get<ElsevierResultModel>(
       'https://cors-anywhere.herokuapp.com/https://api.elsevier.com/content/search/scopus?query=' +
       searchQuery.replace(' ', '+') +
-      //'&view=complete'+
-      '&apiKey=7f59af901d2d86f78a1fd60c1bf9426a',
-      {
-        headers: new HttpHeaders().set('Access-Control-Allow-Origin', '*'),
-      }
+      //'&view=complete' +
+      '&apiKey=e40692ae5d5b41d32316bb88765a2da5'
     );
   }
 
