@@ -1,7 +1,7 @@
 <div *ngIf="!(loading$ | async) && !(error$ | async)">
   <div class="mt-5">
     <div *ngFor="let result of (searchResult$ | async);last as isLast">
-      <div class="border-top mb-2" [class.border-bottom]="isLast">
+      <div class="border-top mb-2" [class.mb-5]="isLast">
         <div class="container-fluid small" style="padding: 0">
 
           <div class="row font-weight-bold">
@@ -34,7 +34,8 @@
   </div>
 </div>
 <div *ngIf="(loading$ | async)">
-  loading ...
+  loading ... 🔜
+  <p>this might take a moment 🔭</p>
 </div>
 <div *ngIf="(error$ | async) as error">
   <p>There has been a problem:</p>
