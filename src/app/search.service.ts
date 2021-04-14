@@ -10,7 +10,7 @@ import {ElsevierResultModel} from './store/models/elsevier-result.model';
   providedIn: 'root'
 })
 export class SearchService {
-  private baseURL= 'https://scifind.herokuapp.com/';
+  private baseURL = 'https://scifind.herokuapp.com/';
 
   constructor(private http: HttpClient) {}
 
@@ -32,6 +32,7 @@ export class SearchService {
       'elsevier' +
       '/scopus?query=' +
       searchQuery.replace(' ', '+')
+      //'&view=COMPLETE'
       //'http://localhost:3000/elsevier/scopus?query=' + searchQuery.replace(' ', '+') + '&view:complete'
       //'https://cors-anywhere.herokuapp.com/https://api.elsevier.com/content/search/scopus?query=' +
       //searchQuery.replace(' ', '+') +

@@ -16,6 +16,16 @@ const initialState: SearchState = {
   error: undefined
 };
 
+const emptyResult: SearchResult = {
+  author: '⚠️',
+  title: 'Nothing Found',
+  date: '',
+  publisher: '',
+  link: '⚠️ not given',
+  abstract: 'The data provider did not find results matching your search query. Try searching with a different one.'
+}
+
+
 export function SearchReducer(state: SearchState = initialState, action: SearchAction): any {
   switch (action.type) {
     // Loading
@@ -72,52 +82,63 @@ export function SearchReducer(state: SearchState = initialState, action: SearchA
 
 function transformSpringerPayload(payload: SpringerResponseModel): SearchResult[]{
   const searchResults: SearchResult[] = [];
-  payload.records.forEach( (record) => {
-    const result: SearchResult = {
-      author: transformToString(record.creators) ? transformToString(record.creators) : '⚠️ not given',
-      title: record.title ? record.title : '⚠️ not given',
-      date: record.publicationDate ? record.publicationDate.toString() : '⚠️ not given',
-      publisher: record.publisher ?  record.publisher : '⚠️ not given',
-      link: record.url[0].value ? record.url[0].value : '⚠️ not given',
-      abstract: record.abstract ? record.abstract : '⚠️ not given'
-    };
-    searchResults.push(result);
-  });
+  if (payload.result[0].total === '0'){
+    searchResults.push(emptyResult);
+  } else {
+    payload.records?.forEach( (record) => {
+      const result: SearchResult = {
+        author: transformToString(record.creators) ? transformToString(record.creators) : '⚠️ not given',
+        title: record.title ? record.title : '⚠️ not given',
+        date: record.publicationDate ? record.publicationDate.toString() : '⚠️ not given',
+        publisher: record.publisher ?  record.publisher : '⚠️ not given',
+        link: record.url[0].value ? record.url[0].value : '⚠️ not given',
+        abstract: record.abstract ? record.abstract : '⚠️ not given'
+      };
+      searchResults.push(result);
+    });
+  }
+
   return searchResults;
 }
 
 function transformIeeePayload(payload: IeeeResponseModel): SearchResult[] {
   const searchResults: SearchResult[] = [];
-  payload.articles.forEach( (article) => {
-    const result: SearchResult = {
-      author: transformToStringIeee(article.authors.authors) ? transformToStringIeee(article.authors.authors) : '⚠️ not given',
-      title: article.title ? article.title : '⚠️ not given',
-      date: article.publication_date ? article.publication_date : '⚠️ not given',
-      publisher: article.publisher ?  article.publisher : '⚠️ not given',
-      link: article.html_url ? article.html_url : '⚠️ not given',
-      abstract: article.abstract ? article.abstract : '⚠️ not given'
-    };
-    searchResults.push(result);
-  });
+  if (payload.total_records !== 0){
+    payload.articles?.forEach( (article) => {
+      const result: SearchResult = {
+        author: transformToStringIeee(article.authors.authors) ? transformToStringIeee(article.authors.authors) : '⚠️ not given',
+        title: article.title ? article.title : '⚠️ not given',
+        date: article.publication_date ? article.publication_date : '⚠️ not given',
+        publisher: article.publisher ?  article.publisher : '⚠️ not given',
+        link: article.html_url ? article.html_url : '⚠️ not given',
+        abstract: article.abstract ? article.abstract : '⚠️ not given'
+      };
+      searchResults.push(result);
+    });
+  } else {
+    searchResults.push(emptyResult);
+  }
   return searchResults;
 }
 
 function transformElsevierPayload(payload: ElsevierResultModel): SearchResult[] {
   const searchResults: SearchResult[] = [];
-  payload['search-results'].entry.forEach( (entry) => {
-    const result: SearchResult = {
-      author: entry['dc:creator'] ? entry['dc:creator'] : '⚠️ not given',
-      title: entry['dc:title'] ? entry['dc:title']  : '⚠️ not given',
-      date: entry['prism:coverDate'] ? entry['prism:coverDate'] : '⚠️ not given',
-      publisher: 'Elsevier',
-      link: entry.link.filter(link => link['@ref'] === 'scopus')[0]['@href'] ? entry.link.filter(link => link['@ref'] === 'scopus')[0]['@href'] : '⚠️ not given',
-      abstract: entry['dc:description'] ? entry['dc:description'] : '⚠️ not given'
-    };
-    searchResults.push(result);
-  });
-
+  if (payload['search-results'].entry[0].link){
+    payload['search-results']?.entry.forEach( (entry) => {
+      const result: SearchResult = {
+        author: entry['dc:creator'] ? entry['dc:creator'] : '⚠️ not given',
+        title: entry['dc:title'] ? entry['dc:title']  : '⚠️ not given',
+        date: entry['prism:coverDate'] ? entry['prism:coverDate'] : '⚠️ not given',
+        publisher: 'Elsevier',
+        link: entry.link.filter(link => link['@ref'] === 'scopus')[0]['@href'] ? entry.link.filter(link => link['@ref'] === 'scopus')[0]['@href'] : '⚠️ not given',
+        abstract: entry['dc:description'] ? entry['dc:description'] : '⚠️ not given'
+      };
+      searchResults.push(result);
+    });
+  } else {
+    searchResults.push(emptyResult);
+  }
   return searchResults;
-
 }
 
 function transformToString(authors: Creator[]): string{
